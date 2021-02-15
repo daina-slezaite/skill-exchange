@@ -8,7 +8,8 @@ const skillSchema = new Schema({
     type: String,
     enum: ['Graphic Design', 'Languages', 'Music', 'Illustration', 'Lifestyle', 'Photography & Video', 'Business', 'Writing', 'Fine Art']
   },
-  user: { type: Schema.Types.ObjectId, ref: 'User' }
+  user: { type: Schema.Types.ObjectId, ref: 'User' },
+  reviews: [{ type: Schema.Types.ObjectId, ref: 'Review' }]
 });
 
 const Skill = mongoose.model('Skill', skillSchema);
