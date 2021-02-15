@@ -6,7 +6,7 @@ const skillSchema = new Schema({
   description: String,
   category: {
     type: String,
-    enum: ['Handcrafts', 'Languages', 'Music', 'Art']
+    enum: ['Graphic Design', 'Languages', 'Music', 'Illustration', 'Lifestyle', 'Photography & Video', 'Business', 'Writing', 'Fine Art']
   },
   user: { type: Schema.Types.ObjectId, ref: 'User' }
 });
