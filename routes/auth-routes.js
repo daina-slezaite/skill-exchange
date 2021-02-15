@@ -60,4 +60,40 @@ authRoutes.post('/signup', (req, res, next) => {
   });
 });
 
+authRoutes.post('/login', (req, res, next) => {
+  passport.authenticate('local', (err, theUser, failureDetails) => {
+    if(err) {
+      res.status(500).json({message: 'Authentication unsuccessful.'});
+      return;
+    }
+
+    if(!theUser) {
+      res.status(401).json(failureDetails);
+      return;
+    }
+
+    req.login(theUser, (err) => {
+      if(err) {
+        res.status(500).json({message: 'Session save unsuccessful.'});
+        return;
+      }
+
+      res.status(200).json(theUser);
+    });
+  }) (req, res, next);
+});
+
+authRoutes.post('/logout', (req, res, next) => {
+  req.logout();
+  res.status(200).json({message: 'Successful logout.'});
+});
+
+authRoutes.get('/loggedin', (req, res, next) => {
+  if(req.isAuthenticated()) {
+    res.status(200).json(req.user);
+    return;
+  }
+  res.status(403).json({message: 'Unauthorised access.'});
+});
+
 module.exports = authRoutes;
