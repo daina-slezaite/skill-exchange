@@ -9,7 +9,10 @@ const mongoose     = require('mongoose');
 const logger       = require('morgan');
 const path         = require('path');
 const cors         = require('cors');
-
+const session      = require('express-session');
+const passport     = require('passport');
+ 
+require('./configs/passport');
 
 mongoose
   .connect('mongodb://localhost/react-project-server-side', {useNewUrlParser: true})
@@ -51,6 +54,15 @@ app.use(
     origin: ['http://localhost:3000']
   })
 );
+
+app.use(session({
+  secret:"React project secret",
+  resave: true,
+  saveUninitialized: true
+}));
+
+app.use(passport.initialize());
+app.use(passport.session());
 
 
 // default value for title local
