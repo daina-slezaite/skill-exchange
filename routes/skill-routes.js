@@ -5,7 +5,11 @@ const Skill = require('../models/skill-model');
 
 router.post('/skills', (req, res, next) => {
   const { title, description } = req.body;
-  Skill.create({title, description})
+  Skill.create({
+    title: title,
+    description: description,
+    user: req.user._id
+  })
     .then(response => {
       res.json(response)
     })
@@ -68,5 +72,20 @@ router.delete('/skills/:skillId', (req, res, next) => {
       res.json(error);
     });
 });
+
+router.get('/my-skills', (req, res, next) => {
+  if (!mongoose.Types.ObjectId.isValid(req.user._id)) {
+    res.status(400).json({ message: 'Specified id is not valid' });
+    return;
+  }
+
+  Skill.find({user: req.user._id})
+    .then(mySkills => {
+      res.status(200).json(mySkills);
+    })
+    .catch(error => {
+      res.json(error);
+    })
+})
 
 module.exports = router;
