@@ -19,8 +19,9 @@ const userSchema = new Schema({
     type: String,
     required: [true, 'Password is required.']
   },
-  description: String
-}, 
+  description: String,
+  favoriteSkills: []
+},
 {
   timestamps: true
 });

@@ -1,7 +1,5 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const Review = require('../models/review-model');
-const Skill = require('../models/skill-model');
 const User = require('../models/user-model');
 const router = express.Router();
 

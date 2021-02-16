@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const router = express.Router();
 const Skill = require('../models/skill-model');
+const User = require('../models/user-model');
 
 router.post('/skills', (req, res, next) => {
   const { title, description, category } = req.body;
@@ -89,7 +90,27 @@ router.get('/my-skills', (req, res, next) => {
     })
     .catch(error => {
       res.json(error);
+    });
+});
+
+router.post('/skills/:skillId/to-favorites', (req, res, next) => {
+  if (!mongoose.Types.ObjectId.isValid(req.params.skillId)) {
+    res.status(400).json({ message: 'Specified id is not valid' });
+    return;
+  }
+
+  Skill.findById(req.params.skillId)
+    .then(response => {
+      return User.findByIdAndUpdate(req.user._id, {
+        $push: { favoriteSkills: response._id }
+      });
     })
-})
+    .then(resp => {
+      res.json(resp);
+    })
+    .catch(error => {
+      res.json(error);
+    });
+});
 
 module.exports = router;
