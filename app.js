@@ -76,6 +76,9 @@ app.use('/', index);
 const skillRoutes = require('./routes/skill-routes');
 app.use('/api', skillRoutes);
 
+const reviewRoutes = require('./routes/review-routes');
+app.use('/api', reviewRoutes);
+
 const authRoutes = require('./routes/auth-routes');
 app.use('/api', authRoutes);
 

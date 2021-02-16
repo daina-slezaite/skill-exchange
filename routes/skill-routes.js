@@ -4,10 +4,12 @@ const router = express.Router();
 const Skill = require('../models/skill-model');
 
 router.post('/skills', (req, res, next) => {
-  const { title, description } = req.body;
+  const { title, description, category } = req.body;
   Skill.create({
     title: title,
     description: description,
+    category: category,
+    reviews: [],
     user: req.user._id
   })
     .then(response => {
@@ -20,6 +22,7 @@ router.post('/skills', (req, res, next) => {
 
 router.get('/skills', (req, res, next) => {
   Skill.find()
+    .populate('reviews')
     .then(allSkills => {
       res.json(allSkills);
     })
@@ -35,6 +38,7 @@ router.get('/skills/:skillId', (req, res, next) => {
   }
 
   Skill.findById(req.params.skillId)
+    .populate('reviews')
     .then(skill => {
       res.status(200).json(skill);
     })
