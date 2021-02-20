@@ -22,7 +22,9 @@ router.post('/skills', (req, res, next) => {
 });
 
 router.get('/skills', (req, res, next) => {
-  Skill.find()
+  const userInSession = req.user;
+  const userId = userInSession ? userInSession._id : null;
+  Skill.find({user: { $nin: userId }})
     .populate('reviews')
     .then(allSkills => {
       res.json(allSkills);
@@ -55,8 +57,9 @@ router.put('/skills/:skillId', (req, res, next) => {
   }
 
   Skill.findByIdAndUpdate(req.params.skillId, req.body, {new: true})
-    .then(() => {
-      res.json({message: `Skill with ${req.params.skillId} updated successfully`});
+    .then(skill => {
+      res.status(200).json(skill);
+      // res.json({message: `Skill with ${req.params.skillId} updated successfully`});
     })
     .catch(error => {
       res.json(error);
