@@ -105,7 +105,7 @@ router.post('/skills/:skillId/to-favorites', (req, res, next) => {
   Skill.findById(req.params.skillId)
     .then(response => {
       return User.findByIdAndUpdate(req.user._id, {
-        $push: { favoriteSkills: response._id }
+        $push: { favoriteSkills: response }
       })
       // .populate('favoriteSkills')
       .then(response => {
