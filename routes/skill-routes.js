@@ -45,6 +45,18 @@ router.get('/skills/search', (req, res, next) => {
     });
 }) 
 
+router.get('/skills/:skillId/:userId', (req, res, next) => {
+  Skill.find({$and: [{user: req.params.userId}, {_id: req.params.skillId}]})
+  .then(response => {
+    User.findById(response[0].user)
+      .then(foundUser => {
+        res.status(200).json(foundUser);
+      })
+      .catch(error => res.json(error));
+  })
+  .catch(error => res.json(error));
+})
+
 router.get('/skills/:skillId', (req, res, next) => {
   if (!mongoose.Types.ObjectId.isValid(req.params.skillId)) {
     res.status(400).json({ message: 'Specified id is not valid' });
