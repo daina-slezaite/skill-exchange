@@ -13,15 +13,15 @@ router.get('/my-profile', (req, res, next) => {
     });
 })
 
-router.put('/wantedSkills', (req, res, next) => {
-  User.findByIdAndUpdate(req.user._id, {$set: {wantedSkills: req.body}}, {new: true})
+router.put('/edit-profile', (req, res, next) => {
+  User.findByIdAndUpdate(req.user._id, req.body, {new: true})
     .then(user => {
       res.status(200).json(user);
     })
     .catch(error => {
       res.json(error);
     });
-})
+});
 
 
 module.exports = router;

@@ -8,6 +8,7 @@ authRoutes.post('/signup', (req, res, next) => {
   const email = req.body.email;
   const username = req.body.username;
   const password = req.body.password;
+  const description = req.body.description;
 
   if(!email || !username || !password) {
     res.status(400).json({message: 'All fields - email, username and password - must be provided to sign up.'});
@@ -38,7 +39,8 @@ authRoutes.post('/signup', (req, res, next) => {
     const newUser = new User({
       email: email,
       username: username,
-      password: hashPass
+      password: hashPass,
+      description: description
     });
 
     newUser.save(err => {
