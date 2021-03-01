@@ -14,15 +14,27 @@ router.get('/reviews/:reviewId', (req, res, next) => {
     });
 });
 
-router.post('/reviews', (req, res, next) => {
+router.get('/:skillId/reviews', (req, res, next) => {
+  Review.find({skill: req.params.skillId})
+    .then(reviews => {
+      console.log(reviews);
+      res.json(reviews);
+    })
+    .catch(error => {
+      res.json(error);
+    });
+})
+
+router.post('/:skillId/reviews', (req, res, next) => {
   Review.create({
     comment: req.body.comment,
     rating: req.body.rating,
-    skill: req.body.skillId
+    skill: req.params.skillId,
+    user: req.user._id
   })
     .then(response => {
-      return Skill.findByIdAndUpdate(req.body.skillId, {
-        $push: { reviews: response._id }
+      return Skill.findByIdAndUpdate(req.params.skillId, {
+        $push: { reviews: response }
       });
     })
     .then(resp => {
