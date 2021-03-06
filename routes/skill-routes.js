@@ -3,15 +3,21 @@ const mongoose = require('mongoose');
 const router = express.Router();
 const Skill = require('../models/skill-model');
 const User = require('../models/user-model');
+const uploader = require('../configs/cloudinary-setup.config');
+
+router.post('/upload', uploader.single('imageUrl'), (req, res, next) => {
+  res.json({secure_url: req.file.path});
+})
 
 router.post('/skills', (req, res, next) => {
-  const { title, description, category } = req.body;
+  const { title, description, category, image } = req.body;
   Skill.create({
     title: title,
     description: description,
     category: category,
     reviews: [],
-    user: req.user._id
+    user: req.user._id,
+    imageUrl: image
   })
     .then(response => {
       res.json(response)

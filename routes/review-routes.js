@@ -17,7 +17,6 @@ router.get('/reviews/:reviewId', (req, res, next) => {
 router.get('/:skillId/reviews', (req, res, next) => {
   Review.find({skill: req.params.skillId})
     .then(reviews => {
-      console.log(reviews);
       res.json(reviews);
     })
     .catch(error => {
@@ -37,6 +36,20 @@ router.post('/:skillId/reviews', (req, res, next) => {
         $push: { reviews: response }
       });
     })
+    // .then(() => {
+    //   return Skill.findById(req.params.skillId)
+    //     .then(skills => {
+    //       const ratings = skills.reviews.map(review => {
+    //         return review.rating;
+    //       })
+    //       console.log(ratings);
+    //       const ratingsAvg = ratings.reduce((a,b) => a + b, 0) / ratings.length;
+    //       console.log(ratingsAvg);
+    //       return Skill.findByIdAndUpdate(req.params.skillId, {
+    //         $set: { averageRating: ratingsAvg }
+    //       })
+    //     })
+    // })
     .then(resp => {
       res.json(resp);
     })
