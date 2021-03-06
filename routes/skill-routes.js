@@ -125,7 +125,7 @@ router.get('/my-skills', (req, res, next) => {
     });
 });
 
-router.post('/skills/:skillId/to-favorites', (req, res, next) => {
+router.post('/skills/:skillId/favorites', (req, res, next) => {
   if (!mongoose.Types.ObjectId.isValid(req.params.skillId)) {
     res.status(400).json({ message: 'Specified id is not valid' });
     return;
@@ -134,9 +134,8 @@ router.post('/skills/:skillId/to-favorites', (req, res, next) => {
   Skill.findById(req.params.skillId)
     .then(response => {
       return User.findByIdAndUpdate(req.user._id, {
-        $push: { favoriteSkills: response }
+        $push: { favoriteSkills: response._id }
       })
-      // .populate('favoriteSkills')
       .then(response => {
         res.json(response)
       })
@@ -148,5 +147,29 @@ router.post('/skills/:skillId/to-favorites', (req, res, next) => {
       res.json(error);
     });
 });
+
+router.delete('/skills/:skillId/favorites', (req, res, next) => {
+  if (!mongoose.Types.ObjectId.isValid(req.params.skillId)) {
+    res.status(400).json({ message: 'Specified id is not valid' });
+    return;
+  }
+
+  Skill.findById(req.params.skillId)
+    .then(response => {
+      return User.findByIdAndUpdate(req.user._id, {
+        $pull: { favoriteSkills: response._id }
+      })
+      .then(response => {
+        res.json(response)
+      })
+    })
+    .then(resp => {
+      res.json(resp);
+    })
+    .catch(error => {
+      res.json(error);
+    });
+});
+
 
 module.exports = router;
