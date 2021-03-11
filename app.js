@@ -57,7 +57,7 @@ app.use(favicon(path.join(__dirname, 'public', 'images', 'favicon.ico')));
 app.use(
   cors({
     credentials: true,
-    origin: [process.env.FRONTEND_APP_URL]
+    origin: process.env.FRONTEND_APP_URL
   })
 );
 
