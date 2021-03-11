@@ -57,14 +57,20 @@ app.use(favicon(path.join(__dirname, 'public', 'images', 'favicon.ico')));
 app.use(
   cors({
     credentials: true,
-    origin: ['http://localhost:3000']
+    origin: [process.env.FRONTEND_APP_URL]
   })
 );
 
+app.set("trust proxy", 1);
+
 app.use(session({
-  secret:"React project secret",
+  secret: process.env.SESSION_SECRET,
   resave: true,
-  saveUninitialized: true
+  saveUninitialized: false,
+  cookie: {
+    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+    secure: process.env.NODE_ENV === 'production',
+  }
 }));
 
 app.use(passport.initialize());
