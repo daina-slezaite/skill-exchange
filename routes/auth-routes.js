@@ -14,14 +14,12 @@ authRoutes.post('/signup', (req, res, next) => {
 
   if(!email || !username || !password) {
     res.status(400).json({message: 'All fields - email, username and password - must be provided to sign up.'});
-    console.log('All fields provided during signup');
     return;
   }
 
   const regex = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/;
   if(!regex.test(password)) {
     res.status(400).json({message: 'Password must contain a number, lowercase and uppercase letters and be at least 8 characters long.'});
-    console.log('Password passes regex test');
     return;
   }
 
@@ -30,13 +28,11 @@ authRoutes.post('/signup', (req, res, next) => {
 
     if(err) {
       res.status(500).json({message: 'Something went wrong with the email check.'});
-      console.log('There has been an error with the email check:' , err)
       return;
     }
 
     if(foundUser) {
       res.status(400).json({message: 'This email is already taken. Try with another one.'});
-      console.log('This email is already taken by:', foundUser)
       return;
     }
 
@@ -54,7 +50,6 @@ authRoutes.post('/signup', (req, res, next) => {
       console.log('Trying to save new user');
       if(err) {
         res.status(500).json({message: 'Something went wrong while saving the user to the database.'});
-        console.log('Could not save you: ', err)
         return;
       }
 
@@ -64,7 +59,6 @@ authRoutes.post('/signup', (req, res, next) => {
 
         if(err) {
           res.status(500).json({message: 'Unsuccessful login after signup.'});
-          console.log('something went wrong with login after signup:', err)
           return;
         }
         
